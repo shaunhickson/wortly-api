@@ -11,8 +11,6 @@ app.use(bodyParser.urlencoded({
 mongoose.connect('mongodb://localhost/wortly');
 var Bar = require('./models/bar');
 
-var port = process.env.PORT || 8080;
-
 var router = express.Router();
 
 router.use(function(req, res, next){
@@ -95,6 +93,9 @@ function setLocation(bar, req) {
 
 app.use('/api', router);
 
-app.listen(port);
-console.log('Using port: ' + port);
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var ip_addr = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+app.listen(port, ip_addr, function() {
+	console.log('Listening on port ' + port + ' on server ' + ip_addr);
+});
 
